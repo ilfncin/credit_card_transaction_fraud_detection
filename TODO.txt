@@ -1,0 +1,91 @@
+
+********** **Pendência**: 
+
+- Avaliar um conjunto reduzido. Usar o conjunto abaixo
+features_selecionadas = ['amt_scaled', 'city_pop_scaled', 'gender_encoded_scaled', 'category_freq_scaled', 'cc_num_freq_scaled', 'age_scaled', 'unix_time_scaled']
+X_sample_reduced = df_sample[features_selecionadas]
+print(X_sample_reduced.info())
+
+
+- nas análises das métricas, ao inves de trazer a máxima proporção que pode ser enganaso, trazer um array, com várias métricas para cada cluster. mx proporcao, tamanho do cluster, recall, F1 etc. 
+Pois pode haver um cluster com 100% mas só ter um duas transações e deixo de visualizar um outro cluster com 30% para com 1.000 transações, por exemplo
+
+
+
+
+
+
+
+ver o video da aula de kleber sobre o optuna e tentar usar
+
+
+
+
+rodar o kmeans várias vezes partindo de posições aleatorias diferentes, pois isso pode impactar no resultado
+----Como o algoritmo K-médias encontra um ótimo local ao invés de um ótimo global, então os resultados obtidos irão depender das atribuições (aleatórias) das observações aos K clusters iniciais.
+-------Portanto, é importante rodar o algoritmo várias vezes, partindo de configurações iniciais (aleatórias) diferentes. E então, selecionar a melhor solução, isto é, aquela para a qual o valor da função-objetivo é menor.
+
+procurar o uso do kmeans com kernel!
+
+DBSCAN
+rodar o dbscan em diferentes conficgurações de ε e MinPts ; Use um gráfico k-dist plot: plote as distâncias dos k-vizinhos mais próximos (onde k = MinPts) e procure o "joelho" da curva para estimar ε.
+rodar os demais algoritmos estudados
+
+Se houver muitos -1, considere:
+Diminuir eps (distância de vizinhança).
+Diminuir min_samples (quantidade de vizinhos para formar um cluster).
+Verificar a escala dos dados (padronização/normalização pode impactar fortemente).
+Explorar a distribuição dos dados visualmente.
+
+
+SOM
+
+rodar o SOM com diferentes configurações de hiperparametros. criar uma grande matriz e verificar o que acontece com as fraudes
+----Hiperparâmetros Importantes
+--------Tamanho da Grade (x, y): Determina a resolução do mapa. Grades maiores podem capturar mais nuances, mas exigem mais dados e computação.
+--------Sigma: Controla a extensão da vizinhança durante o treinamento.
+--------Taxa de Aprendizado: Define a magnitude das atualizações dos pesos.
+--------Número de Iterações: Quantidade de vezes que o algoritmo percorre o conjunto de dados.
+
+rodar autoencoders
+rodar os algoritmos de detecção de fraudes da literatura
+
+
+AVALIACAO
+-Usar o optimalK implementado no arquivo da aula que o usa o índice gap
+
+
+migrar as funções úteis para um arquivo python para ser reutilizada. Verificar um nome adequado para uma classe  e checar se outras funções poderiam ser criadas
+
+Nesse dataset considerar que:
+
+
+FEATURES: Nome do comerciante e nomes do cliente
+- verificar como esses nomes podem influenciar no comportamento fraudulento
+- Ver abordagens em 0.02-ilfn-data-exploration.ipynb e continuar novas análises
+- ver documento: https://docs.google.com/document/d/1y9KUw4tRHKMl2RRe4Kg8lK9le6hyjkCNojl9TOSfjS0/edit?tab=t.0
+    - Frequência acumulada até o momento da transação (sem vazamento de dados)
+    - Frequência acumulada em uma janela de tempo (exemplo: últimas 24 horas)
+
+- O nome do cliente pode influenciar no comportamento fraudulento
+- calcular a distância entre o cliente e o comerciante (a partir da latitude e longitude) pode ser interessante
+- refatorar as funções que são comuns para um arquivo .py
+- avaliar o modelo com e sem a feature gender
+
+
+FEATURE JOB
+Analises para a feature job (procurar por esses termos no chatgpt):
+- Distribuição de Frequência	Verificar se a variável segue uma distribuição de cauda longa (alta cardinalidade com poucos cargos concentrando a maioria das transações).
+- Análise de Outliers de Volume	Identificar cargos que, mesmo sendo poucos, concentram um volume desproporcional de transações (potencialmente interessantes para investigação de fraudes ou comportamentos atípicos).
+- Percentual de Transações por Cargo	Entender o peso de cada cargo nas transações. Exemplo: Cargos com poucos representantes mas grande volume de compras.
+- Correlação com Outras Variáveis	Analisar se certos cargos tendem a concentrar transações de alto valor (amt), distâncias maiores (distance_km), ou maior incidência de transações online (category).
+- Análise de Diversidade de Categorias por Cargo	Verificar se determinados cargos concentram transações em poucas ou muitas categorias comerciais, o que pode indicar perfis comportamentais distintos.
+
+Implicações para a Detecção de Fraudes:
+É recomendável realizar o agrupamento dos cargos com base nesses níveis de atividade, criando uma nova variável categórica como job_activity_level (Exemplo: Baixa, Média, Alta).
+Os grupos com alta atividade (acima de 1000 transações) devem ser monitorados mais de perto, já que concentram a maior parte das operações e são mais relevantes na detecção de padrões anômalos.
+Cargos com baixa atividade podem ser consolidados em uma única categoria (“Outros”), reduzindo a dimensionalidade e evitando a introdução de ruído nos algoritmos de clusterização.
+
+💡 Recomendação Final:
+Utilizar técnicas como Frequency Encoding ou Impact Encoding para manter a informação relevante da feature job.
+Avaliar o cruzamento desses grupos de cargos com outras variáveis críticas, como valor das transações (amt), distância entre cliente e comerciante (distance_km) e percentual de transações online, para identificar perfis de maior risco.
